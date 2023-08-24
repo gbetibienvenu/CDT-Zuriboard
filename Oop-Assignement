@@ -1,1 +1,39 @@
-gov 
+class EarthObstructionModule:
+    def __init__(self, speed_of_machine):
+        self.speed = speed_of_machine
+        self.obstruction_data = {}
+
+    def add_obstruction(self, location_a, location_b, expected_time, actual_time):
+        self.obstruction_data[(location_a, location_b)] = (expected_time, actual_time)
+
+    def calculate_expected_time(self, distance):
+        expected_time = distance / self.speed
+        return expected_time
+
+    def is_impenetrable(self, location_a, location_b):
+        if (location_a, location_b) in self.obstruction_data:
+            expected_time, actual_time = self.obstruction_data[(location_a, location_b)]
+            if actual_time > expected_time + 60:
+                return True
+        return False
+
+# Simulated results
+simulated_speed = 3  # Simulated machine speed in miles per minute (converted from 78 minutes for the route)
+simulated_distance = 1.542  # Distance in miles based on the provided coordinates
+
+# Creating an instance of the EarthObstructionModule with simulated speed
+module = EarthObstructionModule(simulated_speed)
+
+# Calculate expected time using simulated distance and speed
+expected_time = module.calculate_expected_time(simulated_distance)
+
+# Adding obstruction data (simulated)
+module.add_obstruction((53.5872, -2.4138), (53.474, -2.2388), expected_time, 78)
+
+# Checking for obstructions
+obstruction_result = module.is_impenetrable((53.5872, -2.4138), (53.474, -2.2388))
+if obstruction_result:
+    print("Impenetrable obstruction detected.")
+else:
+    print("No impenetrable obstruction detected.")
+
